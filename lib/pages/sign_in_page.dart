@@ -1,6 +1,8 @@
+import 'package:blur/methods/show_error_dialog.dart';
 import 'package:blur/widgets/form_field_template.dart';
 import 'package:blur/widgets/google_sign_in_button.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +18,9 @@ class _SignInPageState extends State<SignInPage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool showPassword = false;
   bool loading = false;
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +42,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
               FormFieldTemplate(
                 label: Text("E-mail"),
+                controller: emailController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter something.";
@@ -52,6 +58,7 @@ class _SignInPageState extends State<SignInPage> {
               FormFieldTemplate(
                 label: Text("Password"),
                 keyboardType: TextInputType.visiblePassword,
+                controller: passwordController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter something.";
@@ -78,10 +85,43 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (!formKey.currentState!.validate()) {
                       return;
                     }
+
+                    setState(() {
+                      loading = true;
+                    });
+
+                    try {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      );
+
+                      if (context.mounted) {
+                        context.go('/profile-setup');
+                      }
+                    } on FirebaseAuthException catch (e) {
+                      if (e.code == 'user-not-found' && context.mounted) {
+                        showErrorDialog(
+                          context,
+                          'User not found. Maybe you want to sign up instead?',
+                        );
+                      }
+
+                      if (e.code == 'wrong-password' && context.mounted) {
+                        showErrorDialog(
+                          context,
+                          'The password entered is wrong.',
+                        );
+                      }
+                    }
+
+                    setState(() {
+                      loading = false;
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,

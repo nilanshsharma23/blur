@@ -1,6 +1,8 @@
+import 'package:blur/methods/show_error_dialog.dart';
 import 'package:blur/widgets/form_field_template.dart';
 import 'package:blur/widgets/google_sign_in_button.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
@@ -14,8 +16,12 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   bool showPassword = false;
   bool loading = false;
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +43,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               FormFieldTemplate(
                 label: Text("E-mail"),
+                controller: emailController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter something.";
@@ -51,6 +58,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               FormFieldTemplate(
                 label: Text("Password"),
+                controller: passwordController,
                 keyboardType: TextInputType.visiblePassword,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -78,10 +86,37 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (!formKey.currentState!.validate()) {
                       return;
                     }
+
+                    setState(() {
+                      loading = true;
+                    });
+
+                    try {
+                      await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                            email: emailController.text,
+                            password: passwordController.text,
+                          );
+
+                      if (context.mounted) {
+                        context.go('/profile-setup');
+                      }
+                    } on FirebaseAuthException catch (e) {
+                      if (e.code == "email-already-in-use" && context.mounted) {
+                        showErrorDialog(
+                          context,
+                          "The given e-mail is already in use",
+                        );
+                      }
+                    }
+
+                    setState(() {
+                      loading = false;
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
