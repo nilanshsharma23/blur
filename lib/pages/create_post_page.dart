@@ -88,7 +88,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       );
                     }
 
-                    return SpinKitWave(color: Colors.black, size: 16);
+                    return Center(
+                      child: SpinKitWave(color: Colors.black, size: 32),
+                    );
                   },
                 ),
                 CheckboxListTile(

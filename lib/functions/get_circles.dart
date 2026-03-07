@@ -11,7 +11,15 @@ Future<List<CircleObject>> getCircles() async {
         (await db.collection('circles').doc(code).get()).data()
             as Map<String, dynamic>;
 
-    output.add(CircleObject(code: code, name: data['name']));
+    List<String> moderators = [];
+
+    for (var i = 0; i < data['moderators'].length; i++) {
+      moderators.add(data['moderators'][i]);
+    }
+
+    output.add(
+      CircleObject(code: code, name: data['name'], moderators: moderators),
+    );
   }
 
   return output;

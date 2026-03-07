@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class PostTemplate extends StatelessWidget {
-  const PostTemplate({super.key, required this.postObject});
+  const PostTemplate({
+    super.key,
+    required this.postObject,
+    this.moderator = false,
+  });
 
   final PostObject postObject;
+  final bool moderator;
 
   @override
   Widget build(BuildContext context) {
