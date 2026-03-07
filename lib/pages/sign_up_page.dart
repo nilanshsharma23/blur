@@ -1,4 +1,4 @@
-import 'package:blur/methods/show_error_dialog.dart';
+import 'package:blur/functions/show_error_dialog.dart';
 import 'package:blur/widgets/form_field_template.dart';
 import 'package:blur/widgets/google_sign_in_button.dart';
 import 'package:email_validator/email_validator.dart';

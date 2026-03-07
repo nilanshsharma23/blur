@@ -1,3 +1,5 @@
+import 'package:blur/classes/globals.dart';
+import 'package:blur/classes/profile_object.dart';
 import 'package:blur/widgets/form_field_template.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -80,8 +82,15 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                         .set({
                           'name': nameController.text,
                           'handle': handleController.text,
-                          'circles': [],
+                          'circles': ['00000'],
                         });
+
+                    Globals.currentProfile = ProfileObject(
+                      name: nameController.text,
+                      handle: handleController.text,
+                      uid: FirebaseAuth.instance.currentUser!.uid,
+                      circles: ['00000'],
+                    );
 
                     if (context.mounted) {
                       context.go('/');

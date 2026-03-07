@@ -10,6 +10,8 @@ class FormFieldTemplate extends StatelessWidget {
     this.obsecureText = false,
     this.suffixIcon,
     this.prefixIcon,
+    this.maxLines = 1,
+    this.minLines,
   });
 
   final Widget? label;
@@ -19,6 +21,8 @@ class FormFieldTemplate extends StatelessWidget {
   final bool obsecureText;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
+  final int? maxLines;
+  final int? minLines;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +31,8 @@ class FormFieldTemplate extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obsecureText,
+      maxLines: maxLines,
+      minLines: minLines,
       decoration: InputDecoration(
         fillColor: Theme.of(context).colorScheme.surfaceContainer,
         filled: true,

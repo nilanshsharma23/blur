@@ -1,4 +1,6 @@
-import 'package:blur/methods/show_error_dialog.dart';
+import 'package:blur/classes/globals.dart';
+import 'package:blur/classes/profile_object.dart';
+import 'package:blur/functions/show_error_dialog.dart';
 import 'package:blur/widgets/form_field_template.dart';
 import 'package:blur/widgets/google_sign_in_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -101,13 +103,30 @@ class _SignInPageState extends State<SignInPage> {
                         password: passwordController.text,
                       );
 
-                      var data = await FirebaseFirestore.instance
+                      var doc = await FirebaseFirestore.instance
                           .collection('profiles')
                           .doc(FirebaseAuth.instance.currentUser!.uid)
                           .get();
 
+                      if (doc.exists) {
+                        var data = doc.data() as Map<String, dynamic>;
+
+                        List<String> circles = [];
+
+                        for (var i = 0; i < data['circles'].length; i++) {
+                          circles.add(data['circles'][i]);
+                        }
+
+                        Globals.currentProfile = ProfileObject(
+                          name: data['name'],
+                          handle: data['handle'],
+                          uid: FirebaseAuth.instance.currentUser!.uid,
+                          circles: circles,
+                        );
+                      }
+
                       if (context.mounted) {
-                        context.go(data.exists ? '/' : '/profile-setup');
+                        context.go(doc.exists ? '/' : '/profile-setup');
                       }
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'user-not-found' && context.mounted) {
