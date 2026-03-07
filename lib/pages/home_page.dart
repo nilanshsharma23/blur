@@ -15,13 +15,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool moderator = false;
+  String currentCircle = "00000";
 
   late Future<List<PostObject>> getPostsFuture;
 
   @override
   void initState() {
     super.initState();
-    getPostsFuture = getPosts("00000");
+    getPostsFuture = getPosts(currentCircle);
   }
 
   @override
@@ -46,12 +47,11 @@ class _HomePageState extends State<HomePage> {
                   onSelected: (value) {
                     setState(() {
                       getPostsFuture = getPosts(value!);
+                      currentCircle = value;
                       moderator = snapshot.data!
                           .firstWhere((element) => element.code == value)
                           .moderators
                           .contains(Globals.currentProfile!.uid);
-
-                      debugPrint(moderator.toString());
                     });
                   },
                   initialSelection: snapshot.data![0].code,
@@ -81,7 +81,10 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   spacing: 16,
                   children: List.generate(asyncSnapshot.data!.length, (index) {
-                    return PostTemplate(postObject: asyncSnapshot.data![index]);
+                    return PostTemplate(
+                      postObject: asyncSnapshot.data![index],
+                      currentCircle: currentCircle,
+                    );
                   }),
                 ),
               ),

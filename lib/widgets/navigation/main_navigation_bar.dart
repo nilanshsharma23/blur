@@ -28,7 +28,7 @@ class MainNavigationBar extends StatelessWidget {
           ),
           NavigationDestination(
             icon: Icon(Icons.add_outlined, size: 32),
-            label: "Add",
+            label: "Blurt",
             selectedIcon: Icon(Icons.add, size: 32),
           ),
           NavigationDestination(

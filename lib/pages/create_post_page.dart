@@ -1,5 +1,6 @@
 import 'package:blur/classes/globals.dart';
 import 'package:blur/functions/get_circles.dart';
+import 'package:blur/functions/show_error_dialog.dart';
 import 'package:blur/widgets/form_field_template.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -89,10 +90,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     }
 
                     return Center(
-                      child: SpinKitWave(color: Colors.black, size: 32),
+                      child: SpinKitWave(color: Colors.black, size: 24),
                     );
                   },
                 ),
+                if (currentCircle == "00000")
+                  Text(
+                    "Note: You can only post every 1 hour on the public circle.",
+                    style: TextStyle(fontSize: 16),
+                  ),
                 CheckboxListTile(
                   value: anonymous,
                   onChanged: (value) {
@@ -115,6 +121,32 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       });
 
                       FirebaseFirestore db = FirebaseFirestore.instance;
+
+                      if (currentCircle == "00000") {
+                        var data =
+                            (await db
+                                    .collection(currentCircle)
+                                    .orderBy('created_at', descending: true)
+                                    .limit(1)
+                                    .get())
+                                .docs[0]
+                                .data();
+
+                        DateTime latestPostDate =
+                            DateTime.fromMillisecondsSinceEpoch(
+                              data['created_at'].seconds * 1000,
+                            );
+
+                        if (DateTime.now().difference(latestPostDate).inHours <
+                                1 &&
+                            context.mounted) {
+                          showErrorDialog(
+                            context,
+                            "You have already posted in the last hour.",
+                          );
+                          return;
+                        }
+                      }
 
                       await db.collection(currentCircle).add({
                         'content': contentController.text,
