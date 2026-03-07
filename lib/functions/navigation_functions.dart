@@ -9,6 +9,9 @@ void onDestinationSelected(BuildContext context, {required int index}) {
     case 1:
       GoRouter.of(context).go('/create-post');
       break;
+    case 2:
+      GoRouter.of(context).go('/profile');
+      break;
     default:
   }
 }
@@ -18,6 +21,8 @@ int calculateSelectedIndex(BuildContext context) {
 
   if (location == '/create-post') {
     return 1;
+  } else if (location == '/profile') {
+    return 2;
   } else {
     return 0;
   }

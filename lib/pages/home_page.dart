@@ -1,5 +1,4 @@
 import 'package:blur/functions/get_circles.dart';
-import 'package:blur/widgets/post_template.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -24,6 +23,7 @@ class HomePage extends StatelessWidget {
                   inputDecorationTheme: InputDecorationTheme(
                     border: InputBorder.none,
                   ),
+                  label: Text("Current Circle"),
                   initialSelection: snapshot.data![0].code,
                   dropdownMenuEntries: List.generate(snapshot.data!.length, (
                     index,
@@ -41,9 +41,11 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsetsGeometry.all(16),
-        child: Column(children: [PostTemplate()]),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(16),
+          child: Column(children: []),
+        ),
       ),
     );
   }

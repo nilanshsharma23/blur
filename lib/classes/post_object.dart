@@ -1,14 +1,16 @@
+import 'package:blur/classes/profile_object.dart';
+
 class PostObject {
   final bool anonymous;
   final String uid;
-  final String userId;
+  final ProfileObject? profileObject;
   final DateTime createdAt;
   final String content;
 
   PostObject({
     required this.anonymous,
     required this.uid,
-    required this.userId,
+    this.profileObject,
     required this.createdAt,
     required this.content,
   });

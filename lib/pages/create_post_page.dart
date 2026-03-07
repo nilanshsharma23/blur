@@ -1,8 +1,10 @@
 import 'package:blur/classes/globals.dart';
 import 'package:blur/functions/get_circles.dart';
 import 'package:blur/widgets/form_field_template.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_router/go_router.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({super.key});
@@ -58,6 +60,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     if (asyncSnapshot.hasData) {
                       return DropdownMenu(
                         initialSelection: '00000',
+                        label: Text("Circle"),
                         inputDecorationTheme: InputDecorationTheme(
                           fillColor: Theme.of(
                             context,
@@ -100,7 +103,32 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (!formKey.currentState!.validate()) {
+                        return;
+                      }
+
+                      setState(() {
+                        loading = true;
+                      });
+
+                      FirebaseFirestore db = FirebaseFirestore.instance;
+
+                      await db.collection(currentCircle).add({
+                        'content': contentController.text,
+                        'user_id': Globals.currentProfile!.uid,
+                        'created_at': DateTime.now(),
+                        'anonymous': anonymous,
+                      });
+
+                      if (context.mounted) {
+                        context.go('/');
+                      }
+
+                      setState(() {
+                        loading = false;
+                      });
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       elevation: 0,

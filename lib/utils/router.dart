@@ -2,6 +2,7 @@ import 'package:blur/classes/globals.dart';
 import 'package:blur/classes/profile_object.dart';
 import 'package:blur/pages/create_post_page.dart';
 import 'package:blur/pages/home_page.dart';
+import 'package:blur/pages/profile_page.dart';
 import 'package:blur/pages/profile_setup_page.dart';
 import 'package:blur/pages/sign_in_page.dart';
 import 'package:blur/pages/sign_up_page.dart';
@@ -74,6 +75,7 @@ final router = GoRouter(
           path: '/create-post',
           builder: (context, state) => CreatePostPage(),
         ),
+        GoRoute(path: '/profile', builder: (context, state) => ProfilePage()),
       ],
     ),
   ],

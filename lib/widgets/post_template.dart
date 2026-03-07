@@ -1,7 +1,11 @@
+import 'package:blur/classes/post_object.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class PostTemplate extends StatelessWidget {
-  const PostTemplate({super.key});
+  const PostTemplate({super.key, required this.postObject});
+
+  final PostObject postObject;
 
   @override
   Widget build(BuildContext context) {
@@ -17,17 +21,16 @@ class PostTemplate extends StatelessWidget {
         spacing: 16,
         children: [
           Text(
-            "Nilansh Sharma • @nil4nsh",
+            postObject.anonymous
+                ? "anonymous"
+                : "${postObject.profileObject!.name} • @${postObject.profileObject!.handle}",
             style: TextStyle(fontSize: 16, color: Color.fromARGB(100, 0, 0, 0)),
           ),
           Text(
-            "02/09/2023 19:23 PM",
+            "${DateFormat.yMd('en_IN').format(postObject.createdAt)} ${DateFormat.jm().format(postObject.createdAt)}",
             style: TextStyle(fontSize: 16, color: Color.fromARGB(100, 0, 0, 0)),
           ),
-          Text(
-            "Proin placerat neque felis. Etiam a vestibulum libero, ut venenatis elit. Morbi cursus bibendum aliquam. Nulla facilisi. Aliquam id gravida ipsum. Nullam quis interdum sem. Sed eget efficitur urna. Phasellus lobortis dignissim sem ut lacinia. Nulla et ornare nibh. Aliquam consequat tristique orci, ut mollis purus volutpat sit amet. Ut ut libero diam. Curabitur pulvinar cursus eros eget tempus. Nullam lacinia nulla nibh, vehicula dictum justo sollicitudin iaculis. Suspendisse massa felis, vehicula non dui at, venenatis lacinia nibh. ",
-            style: TextStyle(fontSize: 16),
-          ),
+          SelectableText(postObject.content, style: TextStyle(fontSize: 16)),
         ],
       ),
     );
