@@ -1,9 +1,11 @@
 import 'package:blur/classes/globals.dart';
 import 'package:blur/classes/profile_object.dart';
+import 'package:blur/pages/circles_page.dart';
 import 'package:blur/pages/create_post_page.dart';
 import 'package:blur/pages/home_page.dart';
 import 'package:blur/pages/profile_page.dart';
 import 'package:blur/pages/profile_setup_page.dart';
+import 'package:blur/pages/settings_page.dart';
 import 'package:blur/pages/sign_in_page.dart';
 import 'package:blur/pages/sign_up_page.dart';
 import 'package:blur/widgets/navigation/navigation_scaffold.dart';
@@ -72,10 +74,15 @@ final router = GoRouter(
       routes: [
         GoRoute(path: '/', builder: (context, state) => HomePage()),
         GoRoute(
-          path: '/create-post',
+          path: '/add-blurt',
           builder: (context, state) => CreatePostPage(),
         ),
+        GoRoute(
+          path: '/my-circles',
+          builder: (context, state) => CirclesPage(),
+        ),
         GoRoute(path: '/profile', builder: (context, state) => ProfilePage()),
+        GoRoute(path: '/settings', builder: (context, state) => SettingsPage()),
       ],
     ),
   ],

@@ -32,6 +32,11 @@ class MainNavigationBar extends StatelessWidget {
             selectedIcon: Icon(Icons.add, size: 32),
           ),
           NavigationDestination(
+            icon: Icon(Icons.circle_outlined, size: 32),
+            label: "My Circles",
+            selectedIcon: Icon(Icons.circle, size: 32),
+          ),
+          NavigationDestination(
             icon: Icon(Icons.person_outlined, size: 32),
             label: "Profile",
             selectedIcon: Icon(Icons.person, size: 32),

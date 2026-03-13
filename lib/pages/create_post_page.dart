@@ -96,7 +96,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 ),
                 if (currentCircle == "00000")
                   Text(
-                    "Note: You can only post every 1 hour on the public circle.",
+                    "Note: You can only post every to prevent spam.",
                     style: TextStyle(fontSize: 16),
                   ),
                 CheckboxListTile(
@@ -122,30 +122,33 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
                       FirebaseFirestore db = FirebaseFirestore.instance;
 
-                      if (currentCircle == "00000") {
-                        var data =
-                            (await db
-                                    .collection(currentCircle)
-                                    .orderBy('created_at', descending: true)
-                                    .limit(1)
-                                    .get())
-                                .docs[0]
-                                .data();
+                      var data =
+                          (await db
+                                  .collection(currentCircle)
+                                  .orderBy('created_at', descending: true)
+                                  .limit(1)
+                                  .get())
+                              .docs[0]
+                              .data();
 
-                        DateTime latestPostDate =
-                            DateTime.fromMillisecondsSinceEpoch(
-                              data['created_at'].seconds * 1000,
-                            );
-
-                        if (DateTime.now().difference(latestPostDate).inHours <
-                                1 &&
-                            context.mounted) {
-                          showErrorDialog(
-                            context,
-                            "You have already posted in the last hour.",
+                      DateTime latestPostDate =
+                          DateTime.fromMillisecondsSinceEpoch(
+                            data['created_at'].seconds * 1000,
                           );
-                          return;
-                        }
+
+                      if (DateTime.now().difference(latestPostDate).inHours <
+                              1 &&
+                          context.mounted) {
+                        showErrorDialog(
+                          context,
+                          "You have already posted in the last hour.",
+                        );
+
+                        setState(() {
+                          loading = false;
+                        });
+
+                        return;
                       }
 
                       await db.collection(currentCircle).add({

@@ -7,9 +7,12 @@ void onDestinationSelected(BuildContext context, {required int index}) {
       GoRouter.of(context).go('/');
       break;
     case 1:
-      GoRouter.of(context).go('/create-post');
+      GoRouter.of(context).go('/add-blurt');
       break;
     case 2:
+      GoRouter.of(context).go('/my-circles');
+      break;
+    case 3:
       GoRouter.of(context).go('/profile');
       break;
     default:
@@ -19,10 +22,12 @@ void onDestinationSelected(BuildContext context, {required int index}) {
 int calculateSelectedIndex(BuildContext context) {
   final String location = GoRouterState.of(context).uri.path;
 
-  if (location == '/create-post') {
+  if (location == '/add-blurt') {
     return 1;
-  } else if (location == '/profile') {
+  } else if (location == '/my-circles') {
     return 2;
+  } else if (location == '/profile') {
+    return 3;
   } else {
     return 0;
   }

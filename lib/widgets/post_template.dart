@@ -80,8 +80,9 @@ class _PostTemplateState extends State<PostTemplate> {
                               .doc(widget.postObject.uid)
                               .delete();
 
-                          context.go('/');
-                          Navigator.pop(context);
+                          if (context.mounted) {
+                            context.go('/');
+                          }
                         },
                         child: Text("Yes"),
                       ),
