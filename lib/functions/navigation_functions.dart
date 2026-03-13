@@ -15,6 +15,9 @@ void onDestinationSelected(BuildContext context, {required int index}) {
     case 3:
       GoRouter.of(context).go('/profile');
       break;
+    case 4:
+      GoRouter.of(context).go('/settings');
+      break;
     default:
   }
 }
@@ -28,6 +31,8 @@ int calculateSelectedIndex(BuildContext context) {
     return 2;
   } else if (location == '/profile') {
     return 3;
+  } else if (location == '/settings') {
+    return 4;
   } else {
     return 0;
   }

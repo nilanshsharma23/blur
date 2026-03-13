@@ -34,37 +34,38 @@ class _CircleTemplateState extends State<CircleTemplate> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(widget.circleObject.name, style: TextStyle(fontSize: 16)),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton(
-              onPressed: () async {
-                widget.onStart();
-                FirebaseFirestore db = FirebaseFirestore.instance;
+          if (widget.circleObject.code != "00000")
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () async {
+                  widget.onStart();
+                  FirebaseFirestore db = FirebaseFirestore.instance;
 
-                await db
-                    .collection('profiles')
-                    .doc(FirebaseAuth.instance.currentUser!.uid)
-                    .update({
-                      'circles': FieldValue.arrayRemove([
-                        widget.circleObject.code,
-                      ]),
-                    });
+                  await db
+                      .collection('profiles')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .update({
+                        'circles': FieldValue.arrayRemove([
+                          widget.circleObject.code,
+                        ]),
+                      });
 
-                Globals.currentProfile!.circles.remove(
-                  widget.circleObject.code,
-                );
-                widget.onFinish();
-              },
-              style: TextButton.styleFrom(padding: EdgeInsets.zero),
-              child: Text(
-                "Leave Circle",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Theme.of(context).colorScheme.error,
+                  Globals.currentProfile!.circles.remove(
+                    widget.circleObject.code,
+                  );
+                  widget.onFinish();
+                },
+                style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                child: Text(
+                  "Leave Circle",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );

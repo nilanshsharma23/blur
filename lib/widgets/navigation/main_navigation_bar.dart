@@ -41,6 +41,11 @@ class MainNavigationBar extends StatelessWidget {
             label: "Profile",
             selectedIcon: Icon(Icons.person, size: 32),
           ),
+          NavigationDestination(
+            icon: Icon(Icons.settings_outlined, size: 32),
+            label: "Settings",
+            selectedIcon: Icon(Icons.settings, size: 32),
+          ),
         ],
       ),
     );
