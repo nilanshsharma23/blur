@@ -1,3 +1,5 @@
+import 'package:blur/classes/globals.dart';
+import 'package:blur/functions/delete_account.dart';
 import 'package:blur/widgets/settings_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   });
 
                   await FirebaseAuth.instance.signOut();
+                  Globals.currentProfile = null;
 
                   if (context.mounted) {
                     context.go('/sign-in');
@@ -44,7 +47,21 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SettingsButton(
                 text: "Delete Account",
-                onPressed: () {},
+                onPressed: () async {
+                  setState(() {
+                    loading = true;
+                  });
+
+                  await deleteAccount();
+
+                  if (context.mounted) {
+                    context.go('/sign-in');
+                  }
+
+                  setState(() {
+                    loading = false;
+                  });
+                },
                 color: Theme.of(context).colorScheme.error,
               ),
               if (loading)
