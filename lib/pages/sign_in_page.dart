@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -175,7 +176,60 @@ class _SignInPageState extends State<SignInPage> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [GoogleSignInButton()],
+                children: [
+                  GoogleSignInButton(
+                    onPressed: () async {
+                      setState(() {
+                        loading = true;
+                      });
+
+                      final GoogleSignInAccount googleUser = await GoogleSignIn
+                          .instance
+                          .authenticate();
+
+                      final GoogleSignInAuthentication googleAuth =
+                          googleUser.authentication;
+
+                      final credential = GoogleAuthProvider.credential(
+                        idToken: googleAuth.idToken,
+                      );
+
+                      await FirebaseAuth.instance.signInWithCredential(
+                        credential,
+                      );
+
+                      var doc = await FirebaseFirestore.instance
+                          .collection('profiles')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .get();
+
+                      if (doc.exists) {
+                        var data = doc.data() as Map<String, dynamic>;
+
+                        List<String> circles = [];
+
+                        for (var i = 0; i < data['circles'].length; i++) {
+                          circles.add(data['circles'][i]);
+                        }
+
+                        Globals.currentProfile = ProfileObject(
+                          name: data['name'],
+                          handle: data['handle'],
+                          uid: FirebaseAuth.instance.currentUser!.uid,
+                          circles: circles,
+                        );
+                      }
+
+                      if (context.mounted) {
+                        context.go(doc.exists ? '/' : '/profile-setup');
+                      }
+
+                      setState(() {
+                        loading = false;
+                      });
+                    },
+                  ),
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
