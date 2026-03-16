@@ -19,8 +19,6 @@ Future<void> deleteAccount() async {
     });
   }
 
-  await db.collection('profiles').doc(auth.currentUser!.uid).delete();
-
   Globals.currentProfile = null;
 
   await auth.currentUser?.delete();

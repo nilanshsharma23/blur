@@ -27,6 +27,12 @@ class _SettingsPageState extends State<SettingsPage> {
             mainAxisSize: MainAxisSize.max,
             children: [
               SettingsButton(
+                text: "Edit Profile",
+                onPressed: () {
+                  context.push('/edit-profile');
+                },
+              ),
+              SettingsButton(
                 text: "Sign Out",
                 onPressed: () async {
                   setState(() {

@@ -2,6 +2,7 @@ import 'package:blur/classes/globals.dart';
 import 'package:blur/classes/profile_object.dart';
 import 'package:blur/pages/circles_page.dart';
 import 'package:blur/pages/create_post_page.dart';
+import 'package:blur/pages/edit_profile_page.dart';
 import 'package:blur/pages/home_page.dart';
 import 'package:blur/pages/profile_page.dart';
 import 'package:blur/pages/profile_setup_page.dart';
@@ -65,6 +66,10 @@ final router = GoRouter(
     GoRoute(
       path: '/profile-setup',
       builder: (context, state) => ProfileSetupPage(),
+    ),
+    GoRoute(
+      path: '/edit-profile',
+      builder: (context, state) => EditProfilePage(),
     ),
     ShellRoute(
       navigatorKey: shellNavigatorKey,
